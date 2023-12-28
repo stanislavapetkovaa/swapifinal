@@ -30,65 +30,59 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
-
 @RestController
 public class FilmsController {
-    @Autowired
-    FilmsRepository filmsRepository;
-    @Autowired
-    PeopleRepository peopleRepository;
-    @Autowired
-    PlanetsRepository planetsRepository;
-    @Autowired
-    ObjectValidator objectValidator;
-    @Autowired
-    VehiclesRepository vehiclesRepository;
-    @Autowired
-    StarshipRepository starshipRepository;
-    @Autowired
-    FilmsMapper filmsMapper;
+  @Autowired
+  FilmsRepository filmsRepository;
+  @Autowired
+  PeopleRepository peopleRepository;
+  @Autowired
+  PlanetsRepository planetsRepository;
+  @Autowired
+  ObjectValidator objectValidator;
+  @Autowired
+  VehiclesRepository vehiclesRepository;
+  @Autowired
+  StarshipRepository starshipRepository;
+  @Autowired
+  FilmsMapper filmsMapper;
 
   @PostMapping("/films")
   public List<Films> Name(@RequestBody Set<CreateFilm> createFilm) {
-      
-      List<Films> films = new ArrayList<>();
-      for(CreateFilm filmList:createFilm){
-        objectValidator.validate(filmList);
-        Films inListFilm =  Films.builder()
-        .title(filmList.getTitle())
-        .producer(filmList.getProducer())
-        .epsiodeId(filmList.getEpsiodeId())
-        .director(filmList.getDirector())
-        .openingCrawl(filmList.getOpeningCrawl())
-        .releasDate(filmList.getReleasDate())
-        .build();
-        films.add(inListFilm);
-    
-       
-      }
-      return (List<Films>) filmsRepository.saveAll(films);
+
+    List<Films> films = new ArrayList<>();
+    for (CreateFilm filmList : createFilm) {
+      objectValidator.validate(filmList);
+      Films inListFilm = Films.builder()
+          .title(filmList.getTitle())
+          .producer(filmList.getProducer())
+          .epsiodeId(filmList.getEpsiodeId())
+          .director(filmList.getDirector())
+          .openingCrawl(filmList.getOpeningCrawl())
+          .releasDate(filmList.getReleasDate())
+          .build();
+      films.add(inListFilm);
+
+    }
+    return (List<Films>) filmsRepository.saveAll(films);
   }
 
   @PostMapping("/films/{id}/characters")
   public FilmsCharacters postMethodName(@PathVariable Long id, @RequestBody UpdatePersonCharacters entity) {
 
     Films films = filmsRepository.findById(id).get();
-    filmsMapper.updatePersonFromUpdateRequest(entity,films);
+    filmsMapper.updatePersonFromUpdateRequest(entity, films);
     Films updatedFilms = filmsRepository.save(films);
     Set<People> findAll = updatedFilms.getCharacters();
     List<Long> peronstoReturn = new ArrayList<>();
 
-    for(People people:findAll){
+    for (People people : findAll) {
       Long elementInList = people.getId();
       peronstoReturn.add(elementInList);
     }
     FilmsCharacters filmsCharacters = FilmsCharacters.builder().characters(peronstoReturn).build();
     return filmsCharacters;
 
-  
-      
   }
-  
-  
-    
+
 }

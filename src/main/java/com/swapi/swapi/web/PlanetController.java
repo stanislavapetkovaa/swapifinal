@@ -51,6 +51,7 @@ public class PlanetController {
     @GetMapping("/planets/{planetId}")
     public Planets getPlanets(@PathVariable Long planetId) {
         return  planetsRepository.findById(planetId).get();
+        
     }
     
     

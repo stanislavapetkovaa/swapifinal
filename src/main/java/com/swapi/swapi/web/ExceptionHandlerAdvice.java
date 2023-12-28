@@ -15,7 +15,7 @@ import lombok.Data;
 
 import com.swapi.swapi.error.AuthenticationFailedException;
 import com.swapi.swapi.error.InvalidObjectException;
-import com.swapi.swapi.error.ObjectNotFound;
+
 
 
 @RestControllerAdvice

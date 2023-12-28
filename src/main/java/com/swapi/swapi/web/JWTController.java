@@ -19,8 +19,6 @@ import com.swapi.swapi.web.dto.JWTResponse;
 
 
 
-
-
 @RestController
 public class JWTController {
 
@@ -36,7 +34,8 @@ public class JWTController {
 
 
     @PostMapping("/token")
-    public ResponseEntity<com.swapi.swapi.web.dto.JWTResponse> obtainToken(@RequestBody JWTRequest request) {
+    public ResponseEntity<com.swapi.swapi.web.dto.JWTResponse> obtainToken(
+            @RequestBody JWTRequest request) {
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

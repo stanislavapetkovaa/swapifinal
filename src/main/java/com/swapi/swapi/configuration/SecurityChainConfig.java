@@ -27,8 +27,7 @@ public class SecurityChainConfig {
             auth.requestMatchers(HttpMethod.GET, "/films").permitAll();
             auth.requestMatchers(HttpMethod.POST, "/people").hasRole("ADMIN");
             auth.requestMatchers(HttpMethod.POST, "/token").permitAll();
-            auth.requestMatchers(HttpMethod.GET, "/swagger-ui.html", "/swagger-ui/**", "/v3/**")
-                    .permitAll();
+            
         }).csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(

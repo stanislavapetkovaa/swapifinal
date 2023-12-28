@@ -30,28 +30,21 @@ public class StarshipsController {
 
     @PostMapping("/starships")
     public Starships createStarships(@RequestBody CreateStarshipRequest createStarshipRequest) {
-       List<Long> pilotIds = createStarshipRequest.getPilots();
-       Set<People> people = new HashSet<>();
-       for(Long i:pilotIds){
-        People person = peopleRepository.findById(i).get();
-        people.add(person);
+        List<Long> pilotIds = createStarshipRequest.getPilots();
+        Set<People> people = new HashSet<>();
+        for (Long i : pilotIds) {
+            People person = peopleRepository.findById(i).get();
+            people.add(person);
 
-       }
+        }
 
-        Starships starships = Starships.builder()
-        .mglt(createStarshipRequest.getMglt())
-        .hyperdriveRate(createStarshipRequest.getHyperdriveRate())
-        .starshipClass(createStarshipRequest.getStarshipClass())
-        .pilots(people)
-        .build();
+        Starships starships = Starships.builder().mglt(createStarshipRequest.getMglt())
+                .hyperdriveRate(createStarshipRequest.getHyperdriveRate())
+                .starshipClass(createStarshipRequest.getStarshipClass()).pilots(people).build();
         return starshipRepository.save(starships);
 
 
 
-
-
-        
-       
     }
 
     @GetMapping("/starships")
@@ -59,26 +52,23 @@ public class StarshipsController {
         List<CreateStarshipRequest> resultStarships = new ArrayList<>();
         List<Starships> starships = (List<Starships>) starshipRepository.findAll();
 
-        for(Starships starship: starships){
+        for (Starships starship : starships) {
             CreateStarshipRequest createStarshipRequest = new CreateStarshipRequest();
             List<Long> pilotIds = new ArrayList<>();
             Set<People> people = starship.getPilots();
-            for(People person:people){
+            for (People person : people) {
 
                 pilotIds.add(person.getId());
             }
-            createStarshipRequest = CreateStarshipRequest.builder()
-            .mglt(starship.getMglt())
-            .starshipClass(starship.getStarshipClass())
-            .pilots(pilotIds)
-            .build();
+            createStarshipRequest = CreateStarshipRequest.builder().mglt(starship.getMglt())
+                    .starshipClass(starship.getStarshipClass()).pilots(pilotIds).build();
             resultStarships.add(createStarshipRequest);
 
         }
         return resultStarships;
-        
+
     }
-    
-    
-    
+
+
+
 }

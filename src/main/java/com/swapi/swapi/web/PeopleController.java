@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 
-
 @RestController
 public class PeopleController {
     @Autowired
@@ -39,51 +38,43 @@ public class PeopleController {
 
 
     @GetMapping("/people")
-    public Set<CreatePeople> allPeople () {
-        Iterable<People> peopleIterable=  peopleRepository.findAll();
-        
+    public Set<CreatePeople> allPeople() {
+        Iterable<People> peopleIterable = peopleRepository.findAll();
+
         Set<CreatePeople> peopleC = new HashSet<>();
 
-        for(People person:peopleIterable){
-            Long homeworldId = person.getHomeworld().getId(); // Assuming homeworldId is the ID of the planet
-        //Planets homeworld = planetsRepository.findById(homeworldId).orElse(null);
-            CreatePeople createPeople = CreatePeople.builder().
-            name(person.getName()).birthYear(person.getBirthYear())
-            .height(person.getHeight()).homeworld(homeworldId).
-            mass(person.getMass()).eyeColor(person.getEyeColor()).build();
+        for (People person : peopleIterable) {
+            Long homeworldId = person.getHomeworld().getId();
+            CreatePeople createPeople =
+                    CreatePeople.builder().name(person.getName()).birthYear(person.getBirthYear())
+                            .height(person.getHeight()).homeworld(homeworldId)
+                            .mass(person.getMass()).eyeColor(person.getEyeColor()).build();
             peopleC.add(createPeople);
 
         }
-        
+
         return peopleC;
     }
 
     @PostMapping("/people")
     public Set<People> addPeople(@RequestBody Set<CreatePeople> createPeoples) {
-        Set<People> people=new HashSet<>();
-    
+        Set<People> people = new HashSet<>();
+
         for (CreatePeople createPeople : createPeoples) {
             Optional<Planets> homeworld = planetsRepository.findById(createPeople.getHomeworld());
-            // Assuming findByName is a method in PlanetsRepository to find a planet by name
-    
-            People person = People.builder()
-                    .name(createPeople.getName())
-                    .birthYear(createPeople.getBirthYear())
-                    .gender(createPeople.getGender())
-                    .hairColor(createPeople.getHairColor())
-                    .height(createPeople.getHeight())
-                    .eyeColor(createPeople.getEyeColor())
-                    .homeworld(homeworld.get())
-                    .hairColor(createPeople.getBirthYear())
-                    .birthYear(createPeople.getBirthYear())
-                    .mass(createPeople.getMass())
-                    .edited(createPeople.getEdited())
-                    .created(createPeople.getCreated())
-                    .build();
-    
+
+
+            People person = People.builder().name(createPeople.getName())
+                    .birthYear(createPeople.getBirthYear()).gender(createPeople.getGender())
+                    .hairColor(createPeople.getHairColor()).height(createPeople.getHeight())
+                    .eyeColor(createPeople.getEyeColor()).homeworld(homeworld.get())
+                    .hairColor(createPeople.getBirthYear()).birthYear(createPeople.getBirthYear())
+                    .mass(createPeople.getMass()).edited(createPeople.getEdited())
+                    .created(createPeople.getCreated()).build();
+
             people.add(person);
         }
-    
+
         Iterable<People> savedPeople = peopleRepository.saveAll(people);
         return new HashSet<>((Collection<? extends People>) savedPeople);
     }
@@ -91,30 +82,25 @@ public class PeopleController {
     @GetMapping("/people/{id}")
     public CreatePeople createPeople(@PathVariable Long id) {
         People people = peopleRepository.findById(id).get();
-        CreatePeople createPeople = CreatePeople.builder()
-        .name(people.getName())
-        .birthYear(people.getBirthYear())
-        .homeworld(people.getHomeworld().getId())
-        .gender(people.getGender())
-        .mass(people.getMass())
-        .build();
+        CreatePeople createPeople = CreatePeople.builder().name(people.getName())
+                .birthYear(people.getBirthYear()).homeworld(people.getHomeworld().getId())
+                .gender(people.getGender()).mass(people.getMass()).build();
         return createPeople;
     }
 
     @PutMapping("/people/{id}")
     public People updatePeople(@PathVariable Long id, @RequestBody CreatePeople createPeople) {
-        
-        People people = peopleRepository.findById(id)
-        .orElseThrow(() -> new NoSuchElementException(People.class.getName()));
 
-      personmapper.updatePersonFromUpdateRequest(createPeople, people);
-        
+        People people = peopleRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(People.class.getName()));
+
+        personmapper.updatePersonFromUpdateRequest(createPeople, people);
+
         return peopleRepository.save(people);
     }
 
-    
-    
-    
+
+
 }
-    
+
 
