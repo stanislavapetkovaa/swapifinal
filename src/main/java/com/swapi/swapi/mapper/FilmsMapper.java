@@ -20,17 +20,17 @@ import com.swapi.swapi.web.dto.UpdatePersonCharacters;
 @Mapper
 public abstract class FilmsMapper {
 
-    @Mapping(target = "title",
-            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "openingCrawl",
-            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "producer",
-            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "characters", ignore = true)
-    @Mapping(target = "planets", ignore = true)
-    @Mapping(target = "starships", ignore = true)
-    @Mapping(target = "vehicles", ignore = true)
-    public abstract Films updateFilms(CreateFilm req, @MappingTarget Films films);
+        @Mapping(target = "title",
+                        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+        @Mapping(target = "openingCrawl",
+                        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+        @Mapping(target = "producer",
+                        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+        @Mapping(target = "characters", ignore = true)
+        @Mapping(target = "planets", ignore = true)
+        @Mapping(target = "starships", ignore = true)
+        @Mapping(target = "vehicles", ignore = true)
+        public abstract Films updateFilms(CreateFilm req, @MappingTarget Films films);
 
 
 

@@ -25,6 +25,7 @@ public class SecurityChainConfig {
         return httpSecurity.authorizeHttpRequests(auth -> {
             auth.requestMatchers(HttpMethod.GET, "/people").permitAll();
             auth.requestMatchers(HttpMethod.GET, "/films").permitAll();
+            auth.requestMatchers(HttpMethod.GET, "/sendDevStatics").permitAll();
             auth.requestMatchers(HttpMethod.POST, "/planets").permitAll();
             auth.requestMatchers(HttpMethod.POST, "/people").hasRole("ADMIN");
             auth.requestMatchers(HttpMethod.POST, "/token").permitAll();

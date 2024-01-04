@@ -13,27 +13,29 @@ import com.swapi.swapi.web.dto.CreatePeople;
 @Mapper
 public abstract class PeopleMapper {
 
-    @Mapping
-    (target = "name", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "gender",nullValuePropertyMappingStrategy  = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "homeworld", target = "homeworld", qualifiedByName = "mapHomeworld", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract People updatePersonFromUpdateRequest(CreatePeople req, @MappingTarget People person);
+    @Mapping(target = "name",
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "gender",
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(source = "homeworld", target = "homeworld", qualifiedByName = "mapHomeworld",
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    public abstract People updatePersonFromUpdateRequest(CreatePeople req,
+            @MappingTarget People person);
 
     @Named("mapHomeworld")
     protected Planets mapHomeworld(Long homeworldId) {
-        
-       if(homeworldId!=0){
-        Planets planets = new Planets();
-        planets.setId(homeworldId);
-        // Additional mapping logic if needed
-        return planets;
-       }
-    return null;
+
+        if (homeworldId != 0) {
+            Planets planets = new Planets();
+            planets.setId(homeworldId);
+            // Additional mapping logic if needed
+            return planets;
+        }
+        return null;
 
     }
 
 
 }
 
-    
 
