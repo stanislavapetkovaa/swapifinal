@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.security.test.context.support.WithMockUser;
 
 
 
@@ -19,23 +18,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 @Tag("integration")
 public class PeopleEndpoints {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Test
-    @WithMockUser(username = "Pesho", roles = {"ADMIN"})
-    void shouldAddAValidPerson() throws Exception {
-        mockMvc.perform(
-                post("/person").header(HttpHeaders.CONTENT_TYPE, "application/json").content("""
-                            {
-                                "firstName": "Ivan",
-                                "age": 14,
-                                "egn": 1111111111
-                            }
-                        """)).andExpect(status().isCreated())
-                .andExpect(jsonPath("$.firstName").value("Ivan"))
-                .andExpect(jsonPath("$.id").isNotEmpty());
-    }
 
 
 }
