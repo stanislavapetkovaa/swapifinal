@@ -1,5 +1,6 @@
 package com.swapi.swapi.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -17,18 +18,17 @@ import java.util.Set;
 @Data
 @Builder
 public class Vehicles {
-    @Setter(AccessLevel.NONE)
-    @Id
-     @GeneratedValue
-    private Long id;
-    private String vehicleClass;
+  @Setter(AccessLevel.NONE)
+  @Id
+  @GeneratedValue
+  private Long id;
+  @Column(unique = true)
+  private String vehicleClass;
 
-    @ManyToMany
-@JoinTable(
-  name = "vehicles_people", 
-  joinColumns = @JoinColumn(name = "vehicles_id"), 
-  inverseJoinColumns = @JoinColumn(name = "people_id"))
-Set<People> pilots;
+  @ManyToMany
+  @JoinTable(name = "vehicles_people", joinColumns = @JoinColumn(name = "vehicles_id"),
+      inverseJoinColumns = @JoinColumn(name = "people_id"))
+  Set<People> pilots;
 
-    
+
 }

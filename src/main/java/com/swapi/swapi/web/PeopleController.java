@@ -9,15 +9,19 @@ import java.util.Set;
 
 import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.swapi.swapi.error.ObjectExistsException;
 import com.swapi.swapi.mapper.PeopleMapper;
 import com.swapi.swapi.model.People;
 import com.swapi.swapi.model.Planets;
+import com.swapi.swapi.repository.PeoplePagingRepository;
 import com.swapi.swapi.repository.PeopleRepository;
 import com.swapi.swapi.repository.PlanetsRepository;
 import com.swapi.swapi.web.dto.CreatePeople;
-
+import com.swapi.swapi.web.dto.PeopleAPIApiPage;
+import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +39,9 @@ public class PeopleController {
     PlanetsRepository planetsRepository;
     @Autowired
     PeopleMapper personmapper;
+
+    @Autowired
+    PeoplePagingRepository peoplePagingRepository;
 
 
     @GetMapping("/people")
@@ -57,26 +64,27 @@ public class PeopleController {
     }
 
     @PostMapping("/people")
-    public Set<People> addPeople(@RequestBody Set<CreatePeople> createPeoples) {
-        Set<People> people = new HashSet<>();
-
-        for (CreatePeople createPeople : createPeoples) {
-            Optional<Planets> homeworld = planetsRepository.findById(createPeople.getHomeworld());
+    public People addPeople(@RequestBody CreatePeople createPeople) {
 
 
-            People person = People.builder().name(createPeople.getName())
-                    .birthYear(createPeople.getBirthYear()).gender(createPeople.getGender())
-                    .hairColor(createPeople.getHairColor()).height(createPeople.getHeight())
-                    .eyeColor(createPeople.getEyeColor()).homeworld(homeworld.get())
-                    .hairColor(createPeople.getBirthYear()).birthYear(createPeople.getBirthYear())
-                    .mass(createPeople.getMass()).edited(createPeople.getEdited())
-                    .created(createPeople.getCreated()).build();
+        if (peopleRepository.existsByName(createPeople.getName())) {
+            throw new ObjectExistsException();
 
-            people.add(person);
         }
+        Planets homeworld = planetsRepository.findById(createPeople.getHomeworld()).get();
 
-        Iterable<People> savedPeople = peopleRepository.saveAll(people);
-        return new HashSet<>((Collection<? extends People>) savedPeople);
+
+        People person = People.builder().name(createPeople.getName())
+                .birthYear(createPeople.getBirthYear()).gender(createPeople.getGender())
+                .hairColor(createPeople.getHairColor()).height(createPeople.getHeight())
+                .eyeColor(createPeople.getEyeColor()).homeworld(homeworld)
+                .hairColor(createPeople.getBirthYear()).birthYear(createPeople.getBirthYear())
+                .mass(createPeople.getMass()).edited(createPeople.getEdited())
+                .created(createPeople.getCreated()).build();
+
+
+        return peopleRepository.save(person);
+
     }
 
     @GetMapping("/people/{id}")
@@ -97,6 +105,15 @@ public class PeopleController {
         personmapper.updatePersonFromUpdateRequest(createPeople, people);
 
         return peopleRepository.save(people);
+    }
+
+    @GetMapping(value = "/pagination")
+
+    private PeopleAPIApiPage<People> getAllPeople(
+            @RequestParam(required = false, defaultValue = "0") @Min(0) Integer page) {
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        // return new PersonApiPage<>(personPagingRepository.findAllBy(pageRequest), pageRequest);
+        return new PeopleAPIApiPage<>(peoplePagingRepository.findAll(pageRequest));
     }
 
 

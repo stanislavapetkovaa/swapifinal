@@ -15,6 +15,7 @@ import lombok.Data;
 
 import com.swapi.swapi.error.AuthenticationFailedException;
 import com.swapi.swapi.error.InvalidObjectException;
+import com.swapi.swapi.error.ObjectExistsException;
 
 
 
@@ -55,11 +56,19 @@ public class ExceptionHandlerAdvice {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(httpEx);
     }
-        @ExceptionHandler(AuthenticationFailedException.class)
+
+    @ExceptionHandler(AuthenticationFailedException.class)
     public ResponseEntity<SwapiHttpHttpException> authenticationFailed(
             AuthenticationFailedException e) {
         SwapiHttpHttpException httpEx = SwapiHttpHttpException.builder().errorId(e.getId())
                 .message(e.getMessage() + ". Cause: " + e.getConcreteError()).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(httpEx);
+    }
+
+    @ExceptionHandler(ObjectExistsException.class)
+    public ResponseEntity<SwapiHttpHttpException> authenticationFailed(ObjectExistsException e) {
+        SwapiHttpHttpException httpEx = SwapiHttpHttpException.builder().errorId(e.getId())
+                .message(e.getMessage() + ". Cause: " + e.getClass() + e.getCause()).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(httpEx);
     }
 

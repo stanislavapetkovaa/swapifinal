@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -25,10 +26,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Planets {
-   
+
     @Id
     @GeneratedValue
     private Long id;
+    @Column(unique = true)
     private String name;
     private String climate;
     private Long surfaceWater;
@@ -39,8 +41,8 @@ public class Planets {
     private String terrain;
     private LocalDate edited;
     private LocalDate created;
-     @JsonIgnore
-     @OneToMany(mappedBy = "homeworld", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "homeworld", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<People> residents;
 
 

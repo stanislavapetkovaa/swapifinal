@@ -1,6 +1,7 @@
 package com.swapi.swapi.model;
 
 import java.util.Set;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -20,23 +21,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Starships {
-    @Setter(AccessLevel.NONE)
-    @Id
-     @GeneratedValue
-    private Long id;
-    private Integer mglt;
-    private String starshipClass;
-    private double hyperdriveRate;
+  @Setter(AccessLevel.NONE)
+  @Id
+  @GeneratedValue
+  private Long id;
+  @Column(unique = true)
+  private Integer mglt;
+  private String starshipClass;
+  private double hyperdriveRate;
 
-        @ManyToMany
-@JoinTable(
-  
-  name = "starships_people", 
-  joinColumns = @JoinColumn(name = "starship_id"), 
-  inverseJoinColumns = @JoinColumn(name = "people_id"))
-Set<People> pilots;
+  @ManyToMany
+  @JoinTable(
+
+      name = "starships_people", joinColumns = @JoinColumn(name = "starship_id"),
+      inverseJoinColumns = @JoinColumn(name = "people_id"))
+  Set<People> pilots;
 
 
 
-    
 }

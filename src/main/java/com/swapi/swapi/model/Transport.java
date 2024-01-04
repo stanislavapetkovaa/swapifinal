@@ -1,7 +1,7 @@
 package com.swapi.swapi.model;
 
 import java.time.LocalDate;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -16,8 +16,9 @@ import lombok.Setter;
 public class Transport {
     @Setter(AccessLevel.NONE)
     @Id
-     @GeneratedValue
+    @GeneratedValue
     private Long id;
+    @Column(unique = true)
     private String name;
     private String manufacturer;
     private String consumables;
@@ -30,5 +31,5 @@ public class Transport {
     private LocalDate created;
     private LocalDate edited;
 
-    
+
 }
